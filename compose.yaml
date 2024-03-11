@@ -1,0 +1,49 @@
+
+version: '3'
+services:
+  build_engine:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: nvcr.io/nvidia/tensorrt:24.02-py3
+        UID: 10002
+        GID: 1015
+    volumes:
+      - ./assets:/app/assets
+      - ./logs:/app/logs
+      - ./scripts:/app/scripts
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: ./scripts/quantize.sh
+  inference:
+    build:
+      context: .
+      args:
+        BASE_IMAGE: nvcr.io/nvidia/tensorrt:24.02-py3
+        UID: 10001
+        GID: 1015
+    volumes:
+      - ./assets:/app/assets
+      - ./logs/inference:/app/logs/inference
+      - ./results:/app/results
+      - ./scripts:/app/scripts
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    command: ./scripts/inference.sh
+  
+
+volumes:
+ onnx_models:
+ models:
+ results:
+ scripts:

@@ -1,0 +1,13 @@
+loguru
+torch
+file:libs/efficientvit-0.1.0-py2.py3-none-any.whl
+Pillow
+cuda-python
+tqdm
+numpy
+torchvision
+opencv-python
+matplotlib
+onnxruntime
+pyYAML
+onnx
